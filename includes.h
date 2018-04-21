@@ -5,6 +5,7 @@
 #include <limits.h>
 
 #define Generic void*
+#define setbit(a,b) ((((1<<(b))|(a))))
 
 #include "hashtable.h"
 #include "heap.h"

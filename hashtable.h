@@ -19,3 +19,4 @@ Generic getHashTable(HashTable *ht, Generic key, Generic (*hashfunc)()){
 void destroyHashTable(HashTable *ht){
 	free(ht->table);
 }
+

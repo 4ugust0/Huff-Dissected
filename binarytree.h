@@ -45,16 +45,3 @@ Node *createNode(Generic data, Node *left, Node *right){
 	newNode->right = right;
 	return newNode;
 }
-
-void btprint(Node *root){
-	printf("%d ", (int)root->data);
-}
-
-void myBTinit(BinaryTree *bt){
-	bt->root = NULL;
-}
-
-void destroyNode(Node *root){
-	free(root->data);
-	free(root);
-}

@@ -18,7 +18,7 @@ void initHeap(Heap *h, Generic (*init)()){
 void enqueueHeap(Heap *h, Generic key, Generic (*cmpfunc)(),
 					Generic (*swapfunc)(), Generic (*retfunc)()){
 	h->size++;
-	h->arr[getSize(h)] = (int)retfunc(key);
+	h->arr[getSize(h)] = retfunc(key);
 
 	int children = getSize(h);
 	int parent = getParent(children);
@@ -55,4 +55,8 @@ Generic dequeueHeap(Heap *h, Generic (*cmpfunc)(), Generic (*swapfunc)()){
 	h->size--;
 	heapifyHeap(h, 1, cmpfunc, swapfunc);
 	return dequeued;
+}
+
+void DestroyHeap(Heap *h, Generic (*destroyfunc)()){
+	destroyfunc(h);
 }
