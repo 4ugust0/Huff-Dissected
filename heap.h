@@ -1,11 +1,3 @@
-#define getSize(a) (( a->size ))
-#define getParent(a) (( a>>1 ))
-#define getData(a,b) (( a->arr[b] ))
-#define getLeft(a) ((a<<1))
-#define getRight(a) (((a<<1) + 1))
-
-#define MAX_HEAP_SIZE 512
-
 typedef struct heap{
 	Generic *arr;
 	int size;
@@ -46,7 +38,6 @@ void heapifyHeap(Heap *h, int i, Generic (*cmpfunc)(), Generic (*swapfunc)()){
 		swapfunc(h, i, swap_candidate);
 		heapifyHeap;
 	}
-
 }
 
 Generic dequeueHeap(Heap *h, Generic (*cmpfunc)(), Generic (*swapfunc)()){

@@ -16,9 +16,6 @@ void decodification(){
 int main(void){
 
 	char x;
-	printf("para codificar um arquivo, digite 0.\n");
-	printf("para decodificar um arquivo, digite 1.\n");
-	printf("digite 2 para sair.\n");
 	scanf("%c", &x);
 	getchar();
 	if(x == '0') makeCodification();

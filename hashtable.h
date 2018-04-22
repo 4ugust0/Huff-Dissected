@@ -1,5 +1,3 @@
-#define MAX_HASH_SIZE 256
-
 typedef struct hashtable{
 	Generic *table;
 }HashTable;

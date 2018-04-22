@@ -4,6 +4,11 @@ typedef struct charfreq{
 }CharFreq;
 
 typedef struct keycode{
-	int bitsSize;
-	unsigned int bitsCode[16]
+	unsigned int bitsSize;
+	unsigned char bitsCode[64];
 }Keycode;
+
+typedef struct mybyte{
+	unsigned char byte;
+	unsigned char counter;
+}myByte;

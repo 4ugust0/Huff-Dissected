@@ -1,5 +1,3 @@
-#define isEmpty(a) (((a==NULL)))
-
 typedef struct node{
 	Generic data;
 	struct node *left;
