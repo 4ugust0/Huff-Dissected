@@ -36,7 +36,7 @@ void heapifyHeap(Heap *h, int i, Generic (*cmpfunc)(), Generic (*swapfunc)()){
 	}
 	if(swap_candidate != i){
 		swapfunc(h, i, swap_candidate);
-		heapifyHeap;
+		heapifyHeap(h, swap_candidate, cmpfunc, swapfunc);
 	}
 }
 

@@ -32,12 +32,8 @@ int nodesHeapCmp(Node *a, Node *b){
 	CharFreq *bb = (CharFreq *) b->data;
 
 	if(aa->frequency < bb->frequency) return 1;
-	else if(aa->frequency == bb->frequency){
-		if(isEmpty(a->left) && isEmpty(b->left)) return 0;
-		else if(aa->key == '*' && bb->key != '*') return 1;{	
-		}
-	}
-	else return 0;
+	if(aa->frequency == bb->frequency && (aa->key == '*' && bb->key != '*')) return 1;
+	return 0;
 }
 
 void nodesHeapSwap(Heap *h, int i, int j){
@@ -45,7 +41,6 @@ void nodesHeapSwap(Heap *h, int i, int j){
 	h->arr[i] = h->arr[j];
 	h->arr[j] = aux;
 }
-
 //-----------------------------------------------------------------------------//
 
 //----- FOR CHAR FREQ <-> CREATE A STRUCTURES WITH A CHAR AND HIS FREQUENCY ---//

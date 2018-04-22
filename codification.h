@@ -98,7 +98,13 @@ void hashKeycodes(HashTable *ht, Node *root){
 void printHuffmanNodes(FILE *fileCompressed, Node *root, int *numNodes){
 	if(!isEmpty(root)){
 		CharFreq *myCharFreq = (CharFreq *)root->data;
-		fputc(myCharFreq->key, fileCompressed);
+		if((isEmpty(root->left) && isEmpty(root->right)) && (myCharFreq->key == '*' || myCharFreq->key == '\\')){
+				fputc('\\', fileCompressed);
+				fputc(myCharFreq->key, fileCompressed);
+		}
+		else{
+			fputc(myCharFreq->key, fileCompressed);
+		}
 		(*numNodes)++;
 		printHuffmanNodes(fileCompressed, root->left, numNodes);
 		printHuffmanNodes(fileCompressed, root->right, numNodes);

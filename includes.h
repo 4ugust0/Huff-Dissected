@@ -24,4 +24,4 @@
 #include "basicstructures.h"
 
 #include "structuresfunctions.h"
-#include "myfunctions.h"
+#include "codification.h"
