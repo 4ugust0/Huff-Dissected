@@ -113,7 +113,7 @@ void printHuffmanNodes(FILE *fileCompressed, Node *root, int *numNodes){
 
 void brushTheBits(HashTable *codificationTable, BinaryTree *HuffmanTree, char *myString){
 	
-	int numNodes = 0;
+	int sizeHuffmanTree = 0;
 	FILE *filetoCompress = fopen(myString, "rb");
 	FILE *fileCompressed = fopen("compressed", "wb");
 
@@ -128,7 +128,7 @@ void brushTheBits(HashTable *codificationTable, BinaryTree *HuffmanTree, char *m
 	fputc(toBrush.byte, fileCompressed);
 	fputc(toBrush.byte, fileCompressed);
 
-	printHuffmanNodes(fileCompressed, HuffmanTree->root, &numNodes);
+	printHuffmanNodes(fileCompressed, HuffmanTree->root, &sizeHuffmanTree);
 
 	while(1){
 		currByte = fgetc(filetoCompress);
@@ -154,7 +154,7 @@ void brushTheBits(HashTable *codificationTable, BinaryTree *HuffmanTree, char *m
 	fclose(filetoCompress);
 	fclose(fileCompressed);
 
-	int Header = (bitThrash<<13) | numNodes;
+	int Header = (bitThrash<<13) | sizeHuffmanTree;
 	toBrush.byte = 0;
 	toBrush.counter = 0;
 

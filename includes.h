@@ -25,3 +25,4 @@
 
 #include "structuresfunctions.h"
 #include "codification.h"
+#include "decodification.h"
