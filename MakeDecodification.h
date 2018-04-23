@@ -27,6 +27,57 @@ BinaryTree *RebuildHuffmanTree(FILE *CompressedFile){
 	HuffmanTree->root = RebuildHuffmanTreeNode(byte, CompressedFile);
 }
 
+unsigned char WriteDecompressedFile(FILE *CompressedFile, FILE *DecompressedFile, BinaryTree *HuffmanTree, Node *AuxiliarNode){
+	unsigned char ByteToBrush;
+	unsigned char NextByteToBrush;
+
+	int CurrentBit = 7;
+
+	ByteToBrush = fgetc(CompressedFile);
+	NextByteToBrush = fgetc(CompressedFile);
+	while(1){
+		if(AuxiliarNode->left == NULL){
+			fputc(AuxiliarNode->data, DecompressedFile);
+			AuxiliarNode = HuffmanTree->root;
+		}
+		else if(IsBitSet(ByteToBrush, CurrentBit)){
+			AuxiliarNode = AuxiliarNode->right;
+			CurrentBit--;
+			if(CurrentBit == -1){
+				CurrentBit = 7;
+				ByteToBrush = NextByteToBrush;
+				NextByteToBrush = fgetc(CompressedFile);
+				if(feof(CompressedFile)) break;
+			}
+		}
+		else{
+			AuxiliarNode = AuxiliarNode->left;
+			CurrentBit--;
+			if(CurrentBit == -1){
+				CurrentBit = 7;
+				ByteToBrush = NextByteToBrush;
+				NextByteToBrush = fgetc(CompressedFile);
+				if(feof(CompressedFile)) break;
+			}
+		}
+	}
+	return ByteToBrush;
+}
+
+void FilterThrash(FILE *CompressedFile, FILE *DecompressedFile, BinaryTree *HuffmanTree, Node *AuxiliarNode,
+							unsigned char HeaderByte0, unsigned char ByteToBrush){
+	int CurrentBit;
+	int HeaderInt0 = HeaderByte0;
+	for(CurrentBit = 7; CurrentBit >= HeaderInt0-1; --CurrentBit){
+		if(AuxiliarNode->left == NULL){
+			fputc(AuxiliarNode->data, DecompressedFile);
+			AuxiliarNode = HuffmanTree->root;
+		}	
+		else if(IsBitSet(ByteToBrush, CurrentBit)) AuxiliarNode = AuxiliarNode->right;
+		else AuxiliarNode = AuxiliarNode->left;
+	}
+}
+
 void Decodification(){
 	char CompressedPath[100];
 	char DecompressedPath[100];
@@ -36,59 +87,17 @@ void Decodification(){
 	FILE *CompressedFile = fopen(CompressedPath, "rb");
 	FILE *DecompressedFile = fopen(DecompressedPath, "wb");
 
-	unsigned char byte0 = fgetc(CompressedFile);
-	unsigned char byte1 = fgetc(CompressedFile);
-
-	byte0 = (byte0>>5);
+	unsigned char HeaderByte0 = fgetc(CompressedFile);
+	unsigned char HeaderByte1 = fgetc(CompressedFile);
+	HeaderByte0 = (HeaderByte0>>5);
 
 	BinaryTree *HuffmanTree = RebuildHuffmanTree(CompressedFile);
 
-	Node *aux = HuffmanTree->root;
-	int counter = 7;
-	unsigned char bits;
-	unsigned char antibits;
+	Node *AuxiliarNode = HuffmanTree->root;
+	unsigned char ByteToBrush;
 
-	bits = fgetc(CompressedFile);
-	antibits = fgetc(CompressedFile);
-	while(1){
-		if(aux->left == NULL){
-			fputc(aux->data, DecompressedFile);
-			aux = HuffmanTree->root;
-		}
-		else if(IsBitSet(bits, counter)){
-			aux = aux->right;
-			counter--;
-			if(counter == -1){
-				counter = 7;
-				bits = antibits;
-				antibits = fgetc(CompressedFile);
-				if(feof(CompressedFile)) break;
-			}
-		}
-		else{
-			aux = aux->left;
-			counter--;
-			if(counter == -1){
-				counter = 7;
-				bits = antibits;
-				antibits = fgetc(CompressedFile);
-				if(feof(CompressedFile)) break;
-			}
-		}
-	}
-
-	int i;
-	int o = byte0;
-	for(i = 7; i >= o-1; --i){
-		if(aux->left == NULL){
-			fputc(aux->data, DecompressedFile);
-			aux = HuffmanTree->root;
-		}	
-		else if(IsBitSet(bits, i)) aux = aux->right;
-		else aux = aux->left;
-	}
-
-	printf("%d\n", o);
+	ByteToBrush = WriteDecompressedFile(CompressedFile, DecompressedFile, HuffmanTree, AuxiliarNode);
+	FilterThrash(CompressedFile, DecompressedFile, HuffmanTree, AuxiliarNode, HeaderByte0, ByteToBrush);
 
 	fclose(CompressedFile);
 	fclose(DecompressedFile);
